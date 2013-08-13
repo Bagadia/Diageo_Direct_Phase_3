@@ -1,0 +1,161 @@
+<!------------------------------------------------------------------------------
+Name        : R_UserProfile.page
+
+Created By  : Jonathan Freese (Appirio)   
+Date        : 7/2/13
+Story/Task  : US607/TA1014
+------------------------------------------------------------------------------->
+<apex:page showheader="false" standardStylesheets="false" sidebar="false" title="Diageo" controller="Controller_UserProfile">
+
+<div class="wrapper">
+    <div class="container">
+        <!-- PAGE HEADER -->
+        <c:R_PageHeader showThemeSelector="false" isLoggedIn="{!isLoggedIn}" basketItemsNumber="{!basketItemsNo}" />
+        <script type="text/javascript">
+            pageViewed('User Profile Page');
+        </script>
+                
+        <!-- content -->
+        <div class="content clearfix">
+
+	        <!--  BREADCRUMB -->
+	        <apex:outputPanel id="beadcrumblinks">
+	            <c:R_pageBreadcrumb breadcrumbLinks="{!breadCrumbLinks}" menuLinks="{!menuLinks}"/>
+	        </apex:outputPanel>
+
+	        <!-- PAGE CONTENT -->
+	        <div class="content bggradient left" style="text-align:left; overflow: visible !important;">
+	            <div class="sub-header">
+	                Profile
+	            </div>
+	            <apex:outputPanel id="pageContent">
+	            <apex:form id="theForm">
+	                    <apex:outputPanel id="messages">
+	                        <apex:messages styleClass="errorMessagesList" />
+	                    </apex:outputPanel>
+	                    <apex:actionFunction status="ajax-status" name="updateUserRecord" action="{!updateUserRecord}" rerender="pageContent, beadcrumblinks"/>
+	                    <apex:actionFunction status="ajax-status" name="cancelEdit" action="{!cancelEdit}" rerender="pageContent, beadcrumblinks"/>
+	
+	                    <table class="profile-table">
+	                        <tr>
+	                            <td class="label">Account</td>
+	                            <td class="value"><apex:outputfield value="{!userRecord.Contact.Account.Name}" /></td>
+	                            <td class="options"></td>
+	                        </tr>
+	                        <tr>
+	                            <td class="label">Username</td>
+	                            <td class="value"><apex:outputfield value="{!userRecord.Username}" /></td>
+	                            <td class="options"></td>
+	                        </tr>
+	                        <tr>
+	                            <td class="label">Name</td>
+	                            <td class="value"><apex:outputfield value="{!userRecord.Name}" /></td>
+	                            <td class="options"></td>
+	                        </tr>
+	                        <tr>
+	                            <td class="label">Time Zone</td>
+	                            <td style="padding-top: 4px; padding-bottom: 4px;" class="timezone-holder">
+	                                <div class="e-value hidden">
+	                                    <div style="position: relative; z-index: 3; width: 100%; height: 50px;"><div style="position: absolute; top: 0px; left: 0px;"><c:R_selectList width="480" trim="false" options="{!Timezones}" value="{!userRecord.TimeZoneSidKey}"/></div></div>
+	                                </div>
+	                                <div class="t-value">
+	                                    <apex:outputText value="{!userRecord.TimeZoneSidKey}" />
+	                                </div>
+	                            </td>
+	                            <td class="options editable">
+	                                <div class="edit-option hidden"><span class="edit-button">Edit</span></div>
+	                                <div class="save-option hidden"><span class="save-button">Save</span> | <span class="cancel-button">Cancel</span></div>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td class="label">Phone Number</td>
+	                            <td class="value">
+	                                <div class="e-value hidden">
+	                                    <apex:inputField value="{!userRecord.Phone}" />
+	                                </div>
+	                                <div class="t-value">
+	                                    <apex:outputText value="{!userRecord.Phone}" />
+	                                </div>
+	                            </td>
+	                            <td class="options editable">
+	                                <div class="edit-option hidden"><span class="edit-button">Edit</span></div>
+	                                <div class="save-option hidden"><span class="save-button">Save</span> | <span class="cancel-button">Cancel</span></div>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td class="label">Alternate Email</td>
+	                            <td class="value">
+	                                <div class="e-value hidden">
+	                                    <apex:inputField value="{!userRecord.Alternate_Email__c}" style="width: 300px;"/>
+	                                </div>
+	                                <div class="t-value">
+	                                    <apex:outputText value="{!userRecord.Alternate_Email__c}" />
+	                                </div>
+	                            </td>
+	                            <td class="options editable">
+	                                <div class="edit-option hidden"><span class="edit-button">Edit</span></div>
+	                                <div class="save-option hidden"><span class="save-button">Save</span> | <span class="cancel-button">Cancel</span></div>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td class="label">Result Per Page</td>
+	                            <td style="padding-top: 4px; padding-bottom: 4px;">
+	                                <div class="e-value hidden">
+	                                    <div style="position: relative; z-index: 2; width: 100%; height: 50px;"><div style="position: absolute; top: 0px; left: 0px;"><c:R_selectList width="80" options="{!NumberOfItemsPerPageList}" value="{!userRecord.Number_of_items_per_page__c}"/></div></div>
+	                                </div>
+	                                <div class="t-value">
+	                                    <apex:outputText value="{!userRecord.Number_of_items_per_page__c}" />
+	                                </div>
+	                            </td>
+	                            <td class="options editable">
+	                                <div class="edit-option hidden"><span class="edit-button">Edit</span></div>
+	                                <div class="save-option hidden"><span class="save-button">Save</span> | <span class="cancel-button">Cancel</span></div>
+	                            </td>
+	                        </tr>
+	                        <!-- Start : Changes for US79/DE594 - Basant Verma-->
+	                        <tr>
+	                            <td class="label">Site Theme</td>
+	                            <td style="padding-top: 4px; padding-bottom: 4px;">
+	                                <div class="e-value hidden">
+	                                    <div style="position: relative; z-index: 1; width: 100%; height: 50px;"><div style="position: absolute; top: 0px; left: 0px; "><c:R_selectList options="{!SiteThemes}" value="{!userRecord.Diageo_Direct_Theme__c}"/></div></div>
+	                                </div>
+	                                <div class="t-value">
+	                                    <apex:outputText value="{!userRecord.Diageo_Direct_Theme__c}" />
+	                                </div>
+	                            </td>
+	                            <td class="options editable">
+	                                <div class="edit-option hidden"><span class="edit-button">Edit</span></div>
+	                                <div class="save-option hidden"><span class="save-button">Save</span> | <span class="cancel-button">Cancel</span></div>
+	                            </td>
+	                        </tr>
+	                        
+	                        <tr>
+	                            <td class="label no-border">Content Notification Frequency</td>
+	                            <td class="no-border" style="padding-top: 4px; padding-bottom: 4px;">
+	                                <div class="e-value hidden">
+	                                    <div style="position: relative; z-index: 1; width: 100%; height: 50px;"><div style="position: absolute; top: 0px; left: 0px; ">
+	                                    <c:R_selectList options="{!NotificationFrequency}" value="{!userRecord.Content_Notification_Frequency__c}"/></div></div>
+	                                </div>
+	                                <div class="t-value">
+	                                    <apex:outputText value="{!userRecord.Content_Notification_Frequency__c}" />
+	                                </div>
+	                            </td>
+	                            <td class="options editable no-border">
+	                                <div class="edit-option hidden"><span class="edit-button">Edit</span></div>
+	                                <div class="save-option hidden"><span class="save-button">Save</span> | <span class="cancel-button">Cancel</span></div>
+	                            </td>
+	                        </tr>
+	                        <!-- End : Changes for US79/DE594 - Basant Verma -->
+	                    </table>
+	            </apex:form>
+	            </apex:outputPanel>
+	        </div>
+	    </div>
+	</div>
+    <!-- PAGE FOOTER -->
+    <c:R_pageFooter isInternal="{!isInternalUser}" />
+
+	<script type="text/javascript" src="{!URLFOR($Resource.RF_JQueries, 'js/jUserProfileJQ.js')}"></script>
+    
+</div>
+</apex:page>
