@@ -30,8 +30,6 @@ Story/Task  : US645/DE675, US646/DE674
     <apex:attribute name="showSearch" description="" type="Boolean" required="false" default="true"/>
     <apex:attribute name="showThemeSelector" description="" type="Boolean" required="false"/>
     <apex:attribute name="basketItemsNumber" description="" type="String" required="false"/>
-    
-    <!-- Carlos Conflict -->
 		
 <!--    <script type="text/javascript" src="{!URLFOR($Resource.Responsive_Base, 'js/jquery-1.8.2.min.js')}"></script>  -->
 	<script type="text/javascript" src="{!URLFOR($Resource.jquery, 'jquery.js')}"></script>
